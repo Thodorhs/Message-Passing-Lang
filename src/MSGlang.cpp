@@ -6,14 +6,34 @@
 #include "MSGlang.h"
 #endif
 
-void print_obj(obj x){
-    int c=0;
-    cout << "object [";
-    for (auto i = x.package.begin(); i != x.package.end(); ++i){
-        string s("");
-        s=s+to_string(c);    
-        cout << "\""<< s <<"\":"<<*i<<",";
-        c++;
+ostream& operator <<(ostream& out, obj& x){
+    out << "object [";
+    for (size_t i = 0; i != x.package.size(); ++i){
+        switch(x.type[i]){
+        case 0:
+            out << "\""<< x.package[i] <<"\":" << x.value[i].i;
+            break;
+        case 1:
+            out << "\""<< x.package[i] <<"\":" << x.value[i].s;
+            break;
+        case 2:
+            out << "\""<< x.package[i] <<"\":" << x.value[i].d;
+            break;
+        case 3:
+            out << "\""<< x.package[i] <<"\":" << x.value[i].b;
+            break;
+        case 4:
+            //out << "\""<< x.package[i] <<"\":" << x.value[i].f;
+            break;
+        case 5:
+            obj* k=x.value[i].o;
+            cout<<&k;
+            break;               
+        }
+        if(i+1!= x.package.size()){
+            out<<",";
+        }
     }
-    cout<<"];"<<endl;
+    out<<"]";
+    return out;
 }
