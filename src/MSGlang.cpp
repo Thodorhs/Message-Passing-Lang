@@ -1,12 +1,16 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <sstream>
+#include <string.h>
 
 #ifndef _MSGlang_H
 #include "MSGlang.h"
 #endif
 
 ostream& operator <<(ostream& out, obj& x){
+    ostringstream ss;
+    obj *k;
     out << "object [";
     for (size_t i = 0; i != x.package.size(); ++i){
         switch(x.type[i]){
@@ -20,15 +24,16 @@ ostream& operator <<(ostream& out, obj& x){
             out << "\""<< x.package[i] <<"\":" << x.value[i].d;
             break;
         case 3:
-            out << "\""<< x.package[i] <<"\":" << x.value[i].b;
+            ss << boolalpha << x.value[i].b;
+            out << "\""<< x.package[i] <<"\":" << ss.str();
             break;
         case 4:
-            //out << "\""<< x.package[i] <<"\":" << x.value[i].f;
-            break;
+            out << "\""<< x.package[i] <<"\":" << string("method");
+            break;  
         case 5:
-            obj* k=x.value[i].o;
-            cout<<&k;
-            break;               
+            k=x.value[i].o;
+            cout<<*k;
+            break;                                   
         }
         if(i+1!= x.package.size()){
             out<<",";
@@ -36,4 +41,32 @@ ostream& operator <<(ostream& out, obj& x){
     }
     out<<"]";
     return out;
+}
+struct val input(const char *s){
+    struct val strv;
+    string in=string();
+    cout << s;
+    cin >> in;
+    try {
+        int i = stoi(in);
+        strv.i = i;
+        return strv;
+    }catch(...){
+        try{
+            cout << "im here"<<endl;
+            double d=stod(in);
+            strv.d = d;
+            return strv;
+        }catch(...){
+            if(strcmp(in.c_str(),"true")==0){
+                strv.b=true;
+                return strv;
+            }else if(strcmp(in.c_str(),"false")==0){
+                strv.b=false;
+                return strv;
+            }  
+        strv.s=in;
+        return strv;
+        }
+    }
 }
