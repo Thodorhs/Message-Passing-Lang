@@ -10,7 +10,7 @@ using namespace std;
 #define key(s) obj(s)
 #define ref(o) &o
 #define func(str) key(str) = lambda
-#define lambda [](obj &x)
+#define lambda []()
 #define none NULL
 #define nl endl
 
@@ -22,7 +22,7 @@ struct val{
     string s;
     double d;
     bool b;
-    function<bool(obj& a)> f;
+    function<bool()> f;
     obj* o;
 };
 
@@ -223,7 +223,7 @@ class obj{
         }
     return *this;
     }
-    obj& operator=(function<bool(obj& a)> fun){
+    obj& operator=(function<bool()> fun){
         struct val strv;
         strv.f=fun;
         cout<<"im here"<<endl;
@@ -232,20 +232,19 @@ class obj{
                 cout<<"im here"<<endl;
                 if(this->package[i].compare(string(change_id))==0){
                     cout<<"im here"<<endl;
-                    this->value[i]=strv;
-                    this->type[i]=functions;
-                    cout<<"im here"<<endl;
-                    return *this;
+                    this->value.push_back(strv);
+                    this->type.push_back(functions);
+                    return  *this;
                 }
             }
         }
-    return *this;
+    return  *this;
     }
     void operator <<(obj& x){
         this->sender=&x;
         for (size_t i = 0; i != this->package.size(); ++i){
             if(this->package[i]==string(x.func_to_call)){
-                this->value[i].f(x);
+                this->value[i].f();
             }
         }
     }
