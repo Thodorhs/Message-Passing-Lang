@@ -10,9 +10,10 @@ using namespace std;
 #define key(s) obj(s)
 #define ref(o) &o
 #define func(str) key(str) = lambda
-#define lambda []
+#define lambda [](obj &x)
 #define none NULL
 #define nl endl
+
 enum types {ints,strings,doubles,bools,functions,objs};
 class obj;
 
@@ -28,7 +29,7 @@ struct val{
 class obj{
 
     public:
-    obj *to_eval;
+    obj *sender;
     const char * func_to_call="";
     int called_for_inspect=0;
     const char *change_id;
@@ -44,6 +45,9 @@ class obj{
         this->package.push_back(string(s));
         this->is_key=1;
         change_id=s;
+    }
+    obj(string s){
+        this->func_to_call=s.c_str();
     }
     obj operator[](obj x){
         return x;
@@ -174,7 +178,7 @@ class obj{
         this->type.push_back(strings);
         return *this;
     }
-    obj& operator=(bool x){
+    /*obj& operator=(bool x){
         bool k = x;
         struct val strv;
         strv.b=k;
@@ -191,7 +195,7 @@ class obj{
         this->value.push_back(strv);
         this->type.push_back(bools);
         return *this;
-    }
+    }*/
     obj& operator=(struct val strv){
             for (size_t i = 0; i != this->package.size(); ++i){
                 if(this->package[i].compare(string(change_id))==0){
@@ -238,33 +242,15 @@ class obj{
     return *this;
     }
     void operator <<(obj& x){
-        this->to_eval=&x;
+        this->sender=&x;
         for (size_t i = 0; i != this->package.size(); ++i){
             if(this->package[i]==string(x.func_to_call)){
                 this->value[i].f(x);
             }
         }
     }
-    void call(char *c){
-        this->func_to_call=c;
-    }
     vector<struct val>  args_list(){
         return this->value;
-    }
-    void eval(char * ss){
-        for (size_t i = 0; i != this->package.size(); ++i){
-            if(this->to_eval->package[i]==string(ss)){
-                this->to_eval->value[i].f(*this);
-            }
-        }
-    }
-    bool eval_cond(char * ss){
-        for (size_t i = 0; i != this->package.size(); ++i){
-            if(this->to_eval->package[i]==string(ss)){
-                return this->to_eval->value[i].f(*this);
-            }
-        }
-        return false;
     }
 };
 

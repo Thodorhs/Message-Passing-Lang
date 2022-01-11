@@ -7,8 +7,8 @@ using namespace std;
 
 
 int main(){
-    let name1 = object[values 3,key("k") = -4,"ege",key("f") = true,key("l") = "this a string giorghs is gay"];
-    let name2 = object[values 3,"alexm", true, 5, 3.2 ,name1];
+    let name1 = object[values 3,key("k") = -4,"ege",key("l") = "this a string giorghs is gay"];
+    let name2 = object[values 3,"alexm", 5, 3.2 ,name1];
 
     cout<<name2<<endl;
 
@@ -25,38 +25,5 @@ int main(){
     let o2 = object; // άδειο object
     let o3 = object [ values 1, "2", true, -3.14 ]; 
     cout<<o1;
-     let connection = object[
-        call("connect"),
-        key("ip") = "1.1.1.1",
-        key("bool") = true,
-        key("port") = 5000,
-        func("cond"){ return arg(port) == self(port);},
-        func("success"){
-            cout << arg(ip) << " connected to " 
-            << self(ip) << nl;
-            return true;
-        },
-        func("failure"){
-            cout << arg(ip) << " failed to connect to" 
-            << self(ip) << nl;
-            return false;
-        }
-    ];
-    cout<<connection;
-    let conn_impl = object[
-        key("ip") = "127.0.0.1",
-        key("port") = 3030,
-        func("connect"){
-            //x.value[i]
-            if(eval_cond("cond")){
-                eval("success");
-            }
-            else
-                eval("failure");
-            return false;
-        }
-    ];
-
-    conn_impl << connection;
     return 0;
 }
