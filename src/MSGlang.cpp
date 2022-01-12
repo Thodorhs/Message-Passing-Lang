@@ -8,6 +8,17 @@
 #include "MSGlang.h"
 #endif
 
+obj::obj(){
+    this->is_key=0;
+}
+obj::obj(const char * s){
+    this->package.push_back(string(s));
+    this->is_key=1;
+    change_id=s;
+}
+obj::obj(string s){
+    this->func_to_call=s;
+}
 ostream& operator <<(ostream& out, obj& x){
     ostringstream ss;
     obj *k;
